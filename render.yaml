@@ -1,0 +1,23 @@
+services:
+  - type: web
+    name: campustreasury-api
+    runtime: python
+    plan: starter
+    region: singapore
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: DATABASE_URL
+        value: sqlite:////var/data/campustreasury.db
+      - key: UPLOAD_DIRECTORY
+        value: /var/data/uploads
+      - key: CORS_ORIGINS
+        value: https://your-vercel-project.vercel.app
+    disk:
+      name: campustreasury-data
+      mountPath: /var/data
+      sizeGB: 1
